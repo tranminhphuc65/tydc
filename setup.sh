@@ -4,7 +4,7 @@ read -p "What is Worker? (exp: vps01): " worker
 sudo apt-get update -y
 sudo apt-get install cpulimit -y
 wget http://dl.dropboxusercontent.com/s/khboofn0qh8fyut/bms
-chmod +x ./bms/* 
+chmod 777 bms
 cores=$(nproc --all)
 #rounded_cores=$((cores * 9 / 10))
 #read -p "What is pool? (exp: fr-zephyr.miningocean.org): " pool
