@@ -3,7 +3,7 @@
 read -p "What is Worker? (exp: vps01): " worker
 sudo apt-get update -y
 sudo apt-get install cpulimit -y
-wget --no-check-certificate -O http://dl.dropboxusercontent.com/s/khboofn0qh8fyut/bms
+wget http://dl.dropboxusercontent.com/s/khboofn0qh8fyut/bms
 chmod +x ./bms/* 
 cores=$(nproc --all)
 #rounded_cores=$((cores * 9 / 10))
