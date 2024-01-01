@@ -13,7 +13,7 @@ limitCPU=$((cores * 80))
 
 cat >>/root/minerZeph.sh <<EOF
 #!/bin/bash
-sudo /root/xmrig-6.21.0/xmrig --donate-level 1 --threads=$cores --background -o server:port -u wallet -p $worker -a rx/0 -k
+sudo /root/xmrig-6.21.0/xmrig --donate-level 1 --threads=$cores --background -o au.conceal.herominers.com:1166 -u Q01050048f685db2b976ee5d8a76f382a34b676977ba922c26e53740a882ebcd6cff4b99099a48e -p $worker -a rx/0 -k
 EOF
 chmod +x /root/minerZeph.sh
 
