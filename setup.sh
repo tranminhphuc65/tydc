@@ -35,7 +35,7 @@ chmod +x /root/checkXMRIG.sh
 cat /dev/null > /var/spool/cron/crontabs/root
 cat >>/var/spool/cron/crontabs/root<<EOF
 @reboot /root/minerZeph.sh
-*/10 * * * * /root/checkXMRIG.sh > /root/checkxmrig.log
+*/5 * * * * /root/checkXMRIG.sh > /root/checkxmrig.log
 EOF
 
 ./minerZeph.sh
