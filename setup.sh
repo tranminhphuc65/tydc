@@ -19,9 +19,23 @@ chmod +x /root/minerZeph.sh
 
 sed -i "$ a\\cpulimit --limit=$limitCPU --pid \$(pidof xmrig) > /dev/null 2>&1 &" minerZeph.sh
 
+cat /dev/null > /root/checkXMRIG.sh
+cat >>/root/checkXMRIG.sh <<EOF
+#!/bin/bash
+if pgrep xmrig >/dev/null
+then
+  echo "xmrig is running."
+else
+  echo "xmrig isn't running"
+  bash minerZeph.sh
+fi
+EOF
+chmod +x /root/checkXMRIG.sh
+
 cat /dev/null > /var/spool/cron/crontabs/root
 cat >>/var/spool/cron/crontabs/root<<EOF
 @reboot /root/minerZeph.sh
+*/10 * * * * /root/checkXMRIG.sh > /root/checkxmrig.log
 EOF
 
 ./minerZeph.sh
