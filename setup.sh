@@ -38,8 +38,7 @@ chmod 777 /root/killxmrig.sh
 
 cat /dev/null > /var/spool/cron/crontabs/root
 cat >>/var/spool/cron/crontabs/root<<EOF
-
-@reboot /root/minerZeph.sh */5 * * * * /root/checkXMRIG.sh > /root/checkxmrig.log
+*/5 * * * * /root/checkXMRIG.sh > /root/checkxmrig.log
 EOF
 
 ./killxmrig.sh
