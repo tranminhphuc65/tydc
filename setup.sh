@@ -9,7 +9,7 @@ chmod +x ./xmrig-6.21.0/*
 cores=$(nproc --all)
 #rounded_cores=$((cores * 9 / 10))
 #read -p "What is pool? (exp: fr-zephyr.miningocean.org): " pool
-limitCPU=$((cores * 77))
+limitCPU=$((cores * 80))
 
 cat /dev/null > /root/minerZeph.sh
 cat >>/root/minerZeph.sh <<EOF
