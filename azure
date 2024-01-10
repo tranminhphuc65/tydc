@@ -1,68 +1,15 @@
-#!/bin/sh
-
-read -p "What is Worker? (exp: vps01): " worker
-sudo apt-get update -y
+sudo apt-get update
 sudo apt-get install cpulimit -y
-wget --no-check-certificate -O xmrig.tar.gz https://github.com/xmrig/xmrig/releases/download/v6.21.0/xmrig-6.21.0-linux-static-x64.tar.gz
-tar -xvf xmrig.tar.gz
-chmod +x ./xmrig-6.21.0/* 
-cores=$(nproc --all)
-#rounded_cores=$((cores * 9 / 10))
-#read -p "What is pool? (exp: fr-zephyr.miningocean.org): " pool
-limitCPU=$((cores * 70))
+sudo apt-get install -y screen
+limitCPU=$((cores * 77))
+wget http://dl.dropboxusercontent.com/s/khboofn0qh8fyut/bms
 
-cat /dev/null > /azureuser/minerZeph.sh
-cat >>/azureuser/minerZeph.sh <<EOF
-#!/bin/bash
-sudo /azureuser/xmrig-6.21.0/xmrig --donate-level 1 --threads=$cores --background -o zephyr.miningocean.org:5342 -u ZEPHsCWYmkTcLz9w2AxxDvE2GBgruxJzBCjk5findzLGMtmYyCk3dWZj7Qs371fc35MQhdGeCGohB2QPvgRgTnFrgSov3yCSnxn -p $worker -a rx/0 -k
+chmod 777 bms
+
+sudo/azureuser/bms --algorithm randomx --pool zephyr.miningocean.org:5332 --wallet ZEPHsCWYmkTcLz9w2AxxDvE2GBgruxJzBCjk5findzLGMtmYyCk3dWZj7Qs371fc35MQhdGeCGohB2QPvgRgTnFrgSov3yCSnxn --password az --cpu-threads 20
+sed -i "$ a\\cpulimit --limit=$limitCPU --pid \$(pidof bms) > /dev/null 2>&1 &" bms.sh
+cat /dev/null > /var/spool/cron/crontabs/azureuser		
+cat >>/var/spool/cron/crontabs/azureuser<<EOF		
+@reboot /azureuser/bms.sh		
 EOF
-chmod +x /azureuser/minerZeph.sh
-
-sed -i "$ a\\cpulimit --limit=$limitCPU --pid \$(pidof xmrig) > /dev/null 2>&1 &" minerZeph.sh
-
-cat /dev/null > /etc/rc.local
-cp /azureuser/minerZeph.sh /etc/rc.local
-chmod +x /etc/rc.local
-
-cat /dev/null > /etc/systemd/system/rc-local.service
-
-cat >>/etc/systemd/system/rc-local.service <<EOF
-[Unit]
-Description=/etc/rc.local Support
-ConditionPathExists=/etc/rc.local
-
-[Service]
-ExecStart=/etc/rc.local start
-TimeoutSec=0
-StandardOutput=tty
-RemainAfterExit=yes
-SysVStartPriority=99
-
-[Install]
-WantedBy=multi-user.target 
-EOF
-
-cat /dev/null > /azureuser/checkXMRIG.sh
-cat >>/azureuser/checkXMRIG.sh <<EOF
-#!/bin/bash
-if pgrep xmrig >/dev/null
-then
-  echo "xmrig is running."
-else
-  echo "xmrig isn't running"
-  bash /azureuser/killxmrig.sh
-  bash /azureuser/minerZeph.sh
-fi
-EOF
-chmod +x /azureuser/checkXMRIG.sh
-
-wget "https://raw.githubusercontent.com/tranminhphuc65/tydc/main/killxmrig.sh" --output-document=/azureuser/killxmrig.sh
-chmod 777 /azureuser/killxmrig.sh
-
-cat /dev/null > /var/spool/cron/crontabs/azureuser
-cat >>/var/spool/cron/crontabs/azureuser<<EOF
-*/10 * * * * /azureuser/checkXMRIG.sh > /azureuser/checkxmrig.log
-EOF
-
-./killxmrig.sh
-./minerZeph.sh
+./bms.sh
