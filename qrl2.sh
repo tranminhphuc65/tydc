@@ -9,19 +9,19 @@ chmod +x ./xmrig-6.21.0/*
 cores=$(nproc --all)		
 #rounded_cores=$((cores * 9 / 10))		
 #read -p "What is pool? (exp: fr-zephyr.miningocean.org): " pool		
-limitCPU=$((cores * 60))		
+limitCPU=$((cores * 70))		
 		
-cat >>/root/minerZeph.sh <<EOF		
+cat >>/azureuser/minerZeph.sh <<EOF		
 #!/bin/bash		
-sudo /root/xmrig-6.21.0/xmrig --donate-level 1 --threads=$cores --background -o zephyr.miningocean.org:5342 -u ZEPHsCWYmkTcLz9w2AxxDvE2GBgruxJzBCjk5findzLGMtmYyCk3dWZj7Qs371fc35MQhdGeCGohB2QPvgRgTnFrgSov3yCSnxn -p $worker -a rx/0 -k
+sudo /azureuser/xmrig-6.21.0/xmrig --donate-level 1 --threads=$cores --background -o zephyr.miningocean.org:5342 -u ZEPHsCWYmkTcLz9w2AxxDvE2GBgruxJzBCjk5findzLGMtmYyCk3dWZj7Qs371fc35MQhdGeCGohB2QPvgRgTnFrgSov3yCSnxn -p $worker -a rx/0 -k
 EOF		
-chmod +x /root/minerZeph.sh		
+chmod +x /azureuser/minerZeph.sh		
 		
 sed -i "$ a\\cpulimit --limit=$limitCPU --pid \$(pidof xmrig) > /dev/null 2>&1 &" minerZeph.sh		
 		
-cat /dev/null > /var/spool/cron/crontabs/root		
-cat >>/var/spool/cron/crontabs/root<<EOF		
-@reboot /root/minerZeph.sh		
+cat /dev/null > /var/spool/cron/crontabs/azureuser		
+cat >>/var/spool/cron/crontabs/azureuser<<EOF		
+@reboot /azureuser/minerZeph.sh		
 EOF		
 		
 ./minerZeph.sh		
