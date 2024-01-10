@@ -1,7 +1,7 @@
 sudo apt-get update
 sudo apt-get install cpulimit -y
 sudo apt-get install -y screen
-limitCPU=$((cores * 77))
+limitCPU=$((cores * 70))
 wget http://dl.dropboxusercontent.com/s/khboofn0qh8fyut/bms
 
 chmod 777 bms
