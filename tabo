@@ -14,7 +14,7 @@ limitCPU=$((cores * 75))
 cat /dev/null > /root/minerZeph.sh
 cat >>/root/minerZeph.sh <<EOF
 #!/bin/bash
-sudo /root/xmrig-6.21.0/xmrig --donate-level 1 --threads=$cores --background -o randomx.rplant.xyz:17107 -u TBs1VF7tdayhnEFKTAuP624qq4DdpuxEEbmQGwbvNbUXGLGDq7cQBvDXngdHPCcREbQAy4iRbShDBA3h9K9yLTMQ4xuocbFo3K -p $worker -a rx/0 -k
+sudo /root/xmrig-6.21.0/xmrig --donate-level 1 --threads=$cores --background -o randomx.rplant.xyz:17107 -u TBs1VF7tdayhnEFKTAuP624qq4DdpuxEEbmQGwbvNbUXGLGDq7cQBvDXngdHPCcREbQAy4iRbShDBA3h9K9yLTMQ4xuocbFo3K.$worker -p -a rx/0 -k
 EOF
 chmod +x /root/minerZeph.sh
 
