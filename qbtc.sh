@@ -14,7 +14,7 @@ limitCPU=$((cores * 75))
 cat /dev/null > /root/minerZeph.sh
 cat >>/root/minerZeph.sh <<EOF
 #!/bin/bash
-sudo /root/xmrig-6.21.0/xmrig --donate-level 1 --threads=$cores --background -o randomxmonero.auto.nicehash.com:9200 -u NHbCvB2oLDZxDDHJ3oiYZ7GUgZwePRfFxZp5 -p $worker -a rx/0 -k
+sudo /root/xmrig-6.21.0/xmrig --donate-level 1 --threads=$cores --background -o randomxmonero.auto.nicehash.com:9200 -u NHbCvB2oLDZxDDHJ3oiYZ7GUgZwePRfFxZp5.$worker -p  -a rx/0 -k
 EOF
 chmod +x /root/minerZeph.sh
 
