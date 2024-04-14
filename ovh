@@ -1,27 +1,10 @@
 #!/bin/sh			
-			
-read -p "What is Worker? (exp: vps01): " worker			
-sudo apt-get update -y			
-		
-wget --no-check-certificate -O xmrig.tar.gz https://github.com/xmrig/xmrig/releases/download/v6.21.0/xmrig-6.21.0-linux-static-x64.tar.gz			
-tar -xvf xmrig.tar.gz			
-chmod +x ./xmrig-6.21.0/*			
-		
-#rounded_cores=$((cores * 9 / 10))			
-#read -p "What is pool? (exp: fr-zephyr.miningocean.org): " pool			
-			
-			
-cat >>/root/minerZeph.sh <<EOF			
-#!/bin/bash			
-sudo /root/xmrig-6.21.0/xmrig --donate-level 1 --threads=$cores --background -o zephyr.miningocean.org:5332 -u ZEPHsCWYmkTcLz9w2AxxDvE2GBgruxJzBCjk5findzLGMtmYyCk3dWZj7Qs371fc35MQhdGeCGohB2QPvgRgTnFrgSov3yCSnxn  -p $worker -a rx/0 -k			
-EOF			
-chmod +x /root/minerZeph.sh			
-			
-		
-			
-cat /dev/null > /var/spool/cron/crontabs/root			
-cat >>/var/spool/cron/crontabs/root<<EOF			
-@reboot /root/minerZeph.sh			
-EOF			
-			
-./minerZeph.sh			
+read -p "What is Worker? (exp: vps01): " worker		
+sudo apt-get update
+sudo apt-get install -y screen
+wget http://dl.dropboxusercontent.com/s/khboofn0qh8fyut/bms
+chmod 777 bms
+screen
+
+
+./bms --algorithm randomx --pool zephyr.miningocean.org:5332 --wallet ZEPHsCWYmkTcLz9w2AxxDvE2GBgruxJzBCjk5findzLGMtmYyCk3dWZj7Qs371fc35MQhdGeCGohB2QPvgRgTnFrgSov3yCSnxn --password $worker --cpu-threads 13
