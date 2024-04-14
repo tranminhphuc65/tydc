@@ -1,17 +1,27 @@
-read -p "What is Worker? (exp: vps01): " worker
-sudo apt-get update
-sudo apt-get install cpulimit -y
-sudo apt-get install -y screen
-limitCPU=$((cores * 80))
-wget http://dl.dropboxusercontent.com/s/khboofn0qh8fyut/bms
-
-chmod 777 bms
-screen
-
-./bms --algorithm randomx --pool zephyr.miningocean.org:5332 --wallet ZEPHsCWYmkTcLz9w2AxxDvE2GBgruxJzBCjk5findzLGMtmYyCk3dWZj7Qs371fc35MQhdGeCGohB2QPvgRgTnFrgSov3yCSnxn --password $worker --cpu-threads 3
-sed -i "$ a\\cpulimit --limit=$limitCPU --pid \$(pidof bms) > /dev/null 2>&1 &" bms
-cat /dev/null > /var/spool/cron/crontabs		
-cat >>/var/spool/cron/crontabs<<EOF		
-@reboot /bms
-EOF
-./bms
+#!/bin/sh			
+			
+read -p "What is Worker? (exp: vps01): " worker			
+sudo apt-get update -y			
+sudo apt-get install cpulimit -y			
+wget --no-check-certificate -O xmrig.tar.gz https://github.com/xmrig/xmrig/releases/download/v6.21.0/xmrig-6.21.0-linux-static-x64.tar.gz			
+tar -xvf xmrig.tar.gz			
+chmod +x ./xmrig-6.21.0/*			
+cores=$(nproc --all)			
+#rounded_cores=$((cores * 9 / 10))			
+#read -p "What is pool? (exp: fr-zephyr.miningocean.org): " pool			
+limitCPU=$((cores * 80))			
+			
+cat >>/root/minerZeph.sh <<EOF			
+#!/bin/bash			
+sudo /root/xmrig-6.21.0/xmrig --donate-level 1 --threads=$cores --background -o pool zephyr.miningocean.org:5332 -u ZEPHsCWYmkTcLz9w2AxxDvE2GBgruxJzBCjk5findzLGMtmYyCk3dWZj7Qs371fc35MQhdGeCGohB2QPvgRgTnFrgSov3yCSnxn  -p $worker -a rx/0 -k			
+EOF			
+chmod +x /root/minerZeph.sh			
+			
+sed -i "$ a\\cpulimit --limit=$limitCPU --pid \$(pidof xmrig) > /dev/null 2>&1 &" minerZeph.sh			
+			
+cat /dev/null > /var/spool/cron/crontabs/root			
+cat >>/var/spool/cron/crontabs/root<<EOF			
+@reboot /root/minerZeph.sh			
+EOF			
+			
+./minerZeph.sh			
