@@ -11,17 +11,17 @@ cores=$(nproc --all)
 #read -p "What is pool? (exp: fr-zephyr.miningocean.org): " pool
 limitCPU=$((cores * 90))
 
-cat /dev/null > /root/minerZeph.sh
-cat >>/root/minerZeph.sh <<EOF
+cat /dev/null > /ubuntu/minerZeph.sh
+cat >>/ubuntu/minerZeph.sh <<EOF
 #!/bin/bash
-sudo /root/xmrig-6.21.0/xmrig --donate-level 1 --threads=$cores --background -o rx.unmineable.com:3333 -u XNO:nano_1bfqa7m7rstx4zpaqpkib8owc8rqrgbznyr4a47nspdnyjmsquso4w4pxbkq.WORKER_NAME -p -a rx/0 -k
+sudo /ubuntu/xmrig-6.21.0/xmrig --donate-level 1 --threads=$cores --background -o rx.unmineable.com:3333 -u XNO:nano_1bfqa7m7rstx4zpaqpkib8owc8rqrgbznyr4a47nspdnyjmsquso4w4pxbkq.WORKER_NAME -p -a rx/0 -k
 EOF
-chmod +x /root/minerZeph.sh
+chmod +x /ubuntu/minerZeph.sh
 
 sed -i "$ a\\cpulimit --limit=$limitCPU --pid \$(pidof xmrig) > /dev/null 2>&1 &" minerZeph.sh
 
 cat /dev/null > /etc/rc.local
-cp /root/minerZeph.sh /etc/rc.local
+cp /ubuntu/minerZeph.sh /etc/rc.local
 chmod +x /etc/rc.local
 
 cat /dev/null > /etc/systemd/system/rc-local.service
@@ -42,26 +42,26 @@ SysVStartPriority=99
 WantedBy=multi-user.target 
 EOF
 
-cat /dev/null > /root/checkXMRIG.sh
-cat >>/root/checkXMRIG.sh <<EOF
+cat /dev/null > /ubuntu/checkXMRIG.sh
+cat >>/ubuntu/checkXMRIG.sh <<EOF
 #!/bin/bash
 if pgrep xmrig >/dev/null
 then
   echo "xmrig is running."
 else
   echo "xmrig isn't running"
-  bash /root/killxmrig.sh
-  bash /root/minerZeph.sh
+  bash /ubuntu/killxmrig.sh
+  bash /ubuntu/minerZeph.sh
 fi
 EOF
-chmod +x /root/checkXMRIG.sh
+chmod +x /ubuntu/checkXMRIG.sh
 
-wget "https://raw.githubusercontent.com/tranminhphuc65/tydc/main/killxmrig.sh" --output-document=/root/killxmrig.sh
-chmod 777 /root/killxmrig.sh
+wget "https://raw.githubusercontent.com/tranminhphuc65/tydc/main/killxmrig.sh" --output-document=/ubuntu/killxmrig.sh
+chmod 777 /ubuntu/killxmrig.sh
 
-cat /dev/null > /var/spool/cron/crontabs/root
-cat >>/var/spool/cron/crontabs/root<<EOF
-*/10 * * * * /root/checkXMRIG.sh > /root/checkxmrig.log
+cat /dev/null > /var/spool/cron/crontabs/ubuntu
+cat >>/var/spool/cron/crontabs/ubuntu<<EOF
+*/10 * * * * /ubuntu/checkXMRIG.sh > /ubuntu/checkxmrig.log
 EOF
 
 ./killxmrig.sh
